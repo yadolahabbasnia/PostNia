@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>PostNia Iran403.ir</title>
+
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --panel: #171717;
+            --panel-soft: #1f1f1f;
+            --panel-muted: #252525;
+            --border: #303030;
+            --border-strong: #3b3b3b;
+            --text: #f5f5f5;
+            --muted: #a7a7a7;
+            --subtle: #737373;
+            --orange: #ff6c37;
+            --orange-hover: #f15a24;
+            --blue: #4c8dff;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(255, 108, 55, 0.12), transparent 32rem),
+                var(--bg);
+            color: var(--text);
+            /* قبلا overflow: hidden بود */
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+            transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            width: 100%;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            background: rgba(23, 23, 23, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+
+        #header::before {
+            content: "";
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--orange), #ff9f75);
+            box-shadow: 0 0 28px rgba(255, 108, 55, 0.35);
+        }
+
+        #header::after {
+            content: "Dark Workspace";
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--muted);
+            background: var(--panel-soft);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        #header h1 {
+            position: absolute;
+            left: 68px;
+            margin: 0;
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 750;
+            letter-spacing: -0.02em;
+        }
+
+        #header h1::after {
+            content: "Iran403.ir";
+            display: block;
+            margin-top: 1px;
+            color: var(--subtle);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            min-height: calc(100vh - 100px); /* قبلا height بود */
+            margin-top: 56px;
+        }
+
+        /* #sidebar {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: rgba(18, 18, 18, 0.98);
+            border-right: 1px solid var(--border);
+        } */
+
+         #sidebar {
+            background: #141414;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 14px;
+        }
+
+        .sidebar-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding: 7px 6px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        #saved {
+            flex: 1;
+            margin: 0;
+            padding: 0 2px 0 0;
+            list-style: none;
+            overflow-y: auto;
+        }
+
+        #saved::-webkit-scrollbar,
+        #main::-webkit-scrollbar,
+        textarea::-webkit-scrollbar,
+        pre::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        #saved::-webkit-scrollbar-thumb,
+        #main::-webkit-scrollbar-thumb,
+        textarea::-webkit-scrollbar-thumb,
+        pre::-webkit-scrollbar-thumb {
+            background: #3d3d3d;
+            border-radius: 999px;
+        }
+
+        .collection-group {
+            margin: 0 0 10px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .collection-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            padding: 9px 10px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--muted);
+            background: transparent;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collection-head::before {
+            content: "▾";
+            color: var(--orange);
+            font-size: 11px;
+        }
+
+        .collection-head:hover {
+            border-color: var(--border);
+            background: var(--panel-soft);
+            color: var(--text);
+        }
+
+        .collection-name {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .collection-items {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .saved-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 8px;
+            margin-bottom: 4px;
+            padding: 8px 8px 8px 16px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--muted);
+            background: transparent;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .saved-item:hover {
+            border-color: var(--border);
+            background: var(--panel-soft);
+            color: var(--text);
+        }
+
+        .saved-name {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .delete-btn,
+        .export-btn {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 7px;
+            color: var(--muted);
+            background: transparent;
+        }
+
+        .export-btn:hover {
+            color: var(--orange);
+            background: rgba(255, 108, 55, 0.12);
+        }
+
+        .delete-btn:hover {
+            color: #fff;
+            background: rgba(239, 68, 68, 0.16);
+        }
+/* 
+        #main {
+            min-width: 0;
+            padding: 18px;
+            overflow-y: auto;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 220px),
+                #101010;
+        } */
+   #main {
+            overflow-y: auto;
+            padding: 18px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 220px),
+                #101010;
+        }
+        .card {
+            display: grid;
+            grid-template-rows: auto auto auto 1fr 1fr;
+            gap: 12px;
+            min-height: 430px; /* کاهش داده شد */
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(23, 23, 23, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .actions button {
+            flex: 0 1 auto;
+            min-height: 34px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-strong);
+            border-radius: 8px;
+            color: var(--text);
+            background: var(--panel-muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .actions .btn-primary {
+            border-color: rgba(76, 141, 255, 0.35);
+            background: rgba(76, 141, 255, 0.16);
+            color: #cfe0ff;
+        }
+
+        .actions .btn-info {
+            border-color: rgba(148, 163, 184, 0.35);
+            background: rgba(148, 163, 184, 0.14);
+            color: #d4d4d4;
+        }
+
+        .actions .btn-success {
+            border-color: rgba(34, 197, 94, 0.35);
+            background: rgba(34, 197, 94, 0.16);
+            color: #bbf7d0;
+        }
+
+        .actions .btn-warning {
+            border-color: rgba(245, 158, 11, 0.36);
+            background: rgba(245, 158, 11, 0.15);
+            color: #fde68a;
+        }
+
+        .actions .btn-danger {
+            min-width: 92px;
+            border-color: var(--orange);
+            background: var(--orange);
+            color: #111;
+        }
+
+        .actions .btn-danger:hover {
+            background: var(--orange-hover);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: minmax(180px, 0.38fr) minmax(0, 1fr);
+            gap: 10px;
+        }
+
+        .row:has(#method) {
+            grid-template-columns: 118px minmax(0, 1fr);
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            margin: 0;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: #111;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            height: 42px;
+            padding: 0 12px;
+        }
+
+        select {
+            color: #ffb99e;
+            font-weight: 800;
+        }
+
+        textarea {
+            min-height: 145px;
+            padding: 12px;
+            resize: vertical;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            line-height: 1.55;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #686868;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(255, 108, 55, 0.13);
+        }
+
+        #main h3 {
+            margin: 18px 0 10px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        pre {
+            min-height: 230px;
+            max-height: 360px;
+            margin: 0;
+            padding: 16px;
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #0b0b0b;
+            color: #d7d7d7;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(8px);
+        }
+
+        .modalContent {
+            width: min(680px, 100%);
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .modalContent h3 {
+            margin: 0 0 14px;
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .modalContent textarea {
+            margin-bottom: 12px;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 40;
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0 18px;
+            border-top: 1px solid var(--border);
+            background: rgba(15, 15, 15, 0.96);
+            color: var(--subtle);
+            font-size: 12px;
+            backdrop-filter: blur(14px);
+        }
+
+        .footer-left,
+        .footer-center,
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .footer-center {
+            flex: 1;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--muted);
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.75);
+        }
+
+        @media (max-width: 860px) {
+            body {
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            #container {
+                grid-template-columns: 1fr;
+                min-height: calc(100vh - 100px);
+            }
+
+            #sidebar {
+                max-height: 320px;
+                overflow-y: auto;
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .row,
+            .row:has(#method) {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .actions button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            #footer {
+                position: static;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 18px;
+            }
+
+            .modalContent {
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                border-radius: 10px;
+                padding: 14px;
+            }
+
+            .modalContent textarea {
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top header -->
+    <div id="header">
+        <h1>PostNia</h1>
+    </div>
+
+    <!-- Container for sidebar + main content -->
+    <div id="container">
+        <div id="sidebar">
+            <div class="sidebar-head">
+                <h2>Saved Requests</h2>
+                <button class="export-btn" title="Export all as Postman" onclick="exportPostman()">⤓</button>
+            </div>
+            <ul id="saved"></ul>
+        </div>
+
+        <div id="main">
+            <!-- Main content card here -->
+            <div class="card">
+                <div class="actions">
+                    <button class="btn-primary" onclick="openModal()">Import cURL</button>
+                    <button class="btn-primary" onclick="document.getElementById('postmanFile').click()">Import Postman</button>
+                    <button class="btn-info" onclick="exportCurl()">Export cURL</button>
+                    <button class="btn-warning" onclick="clearRequest()">Clear</button>
+                    <button id="saveBtn" class="btn-success" onclick="saveRequest()">Save</button>
+                    <button class="btn-danger" onclick="sendRequest()">Send</button>
+                </div>
+                <input type="file" id="postmanFile" accept="application/json,.json"
+                    style="display:none" onchange="importPostman(event)" />
+
+                <div class="row">
+                    <input id="name" placeholder="Request Name" />
+                    <input id="collection" placeholder="Collection (optional)" />
+                </div>
+                <div class="row">
+                    <select id="method" style="max-width: fit-content;">
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PUT</option>
+                        <option>PATCH</option>
+                        <option>DELETE</option>
+                        <option>HEAD</option>
+                        <option>OPTIONS</option>
+                    </select>
+                    <input id="url" placeholder="Request URL" />
+                </div>
+
+                <textarea id="headers"
+                    placeholder='Headers JSON, e.g. { "Authorization": "Bearer ..." }'></textarea>
+                <textarea id="body" placeholder="Request body (JSON, form-data, text, etc.)"></textarea>
+            </div>
+
+            <h3>Response</h3>
+            <pre id="response"></pre>
+        </div>
+    </div>
+
+    <!-- Import cURL Modal -->
+    <div id="modalImport" class="modal">
+        <div class="modalContent">
+            <h3>Paste cURL Command</h3>
+            <textarea id="curlImport" rows="6"></textarea>
+            <div class="actions">
+                <button class="btn-success" onclick="parseCurl()">Convert</button>
+                <button class="btn-danger" onclick="closeImportModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export cURL Modal -->
+    <div id="modalExport" class="modal">
+        <div class="modalContent">
+            <h3>Export cURL Command</h3>
+            <textarea id="curlExport" rows="6" readonly></textarea>
+            <div class="actions">
+                <button class="btn-primary" onclick="copyCurl()">Copy</button>
+                <button class="btn-danger" onclick="closeExportModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <div class="footer-left">
+            PostNia
+            <span class="dot"></span>
+            v1.0
+        </div>
+
+        <div class="footer-center">
+            «برای حمایت از تولید داخلی، یک اتریوم بزن و موتور انگیزه‌ام را روشن کن.»
+        </div>
+
+        <div class="footer-right">
+            © 2026 Iran403.ir — All rights reserved
+        </div>
+    </footer>
+
+</body>
+
+<script>
+    const el = id => document.getElementById(id);
+
+    let currentId = null;
+    function setCurrentId(id) {
+        currentId = id || null;
+        const btn = el('saveBtn');
+        if (btn) btn.textContent = currentId ? 'Update' : 'Save';
+    }
+
+    function openModal() { el('modalImport').style.display = 'flex'; }
+    function closeImportModal() { el('modalImport').style.display = 'none'; }
+    function closeExportModal() { el('modalExport').style.display = 'none'; }
+
+    function clearRequest() {
+        setCurrentId(null);
+        el('name').value = '';
+        el('collection').value = '';
+        el('url').value = '';
+        el('headers').value = '{}';
+        el('body').value = '';
+        el('method').value = 'GET';
+    }
+
+    function formatIfJson(text) {
+        if (!text || typeof text !== 'string') return text;
+        text = text.trim();
+        if (!text.startsWith('{') && !text.startsWith('[')) return text;
+        try { return JSON.stringify(JSON.parse(text), null, 2); }
+        catch { return text; }
+    }
+
+    /* ---------------- CURL TOKENIZER ---------------- */
+    function tokenizeCurl(input) {
+        const s = String(input || '');
+        const tokens = [];
+        let i = 0;
+        const isWs = c => c === ' ' || c === '\t' || c === '\n' || c === '\r';
+
+        while (i < s.length) {
+            while (i < s.length) {
+                if (s[i] === '\\' && (s[i + 1] === '\n' || s[i + 1] === '\r')) {
+                    i += 2;
+                    if (s[i - 1] === '\r' && s[i] === '\n') i++;
+                    continue;
+                }
+                if (isWs(s[i])) { i++; continue; }
+                break;
+            }
+            if (i >= s.length) break;
+
+            let token = '';
+            let started = false;
+            while (i < s.length && !isWs(s[i])) {
+                started = true;
+                const c = s[i];
+                if (c === '"' || c === "'") {
+                    const quote = c;
+                    i++;
+                    while (i < s.length && s[i] !== quote) {
+                        if (quote === '"' && s[i] === '\\' && i + 1 < s.length) {
+                            const n = s[i + 1];
+                            if (n === '"' || n === '\\' || n === '$' || n === '`' || n === '\n') {
+                                token += n;
+                                i += 2;
+                                continue;
+                            }
+                        }
+                        token += s[i++];
+                    }
+                    i++;
+                } else if (c === '\\' && i + 1 < s.length && s[i + 1] !== '\n' && s[i + 1] !== '\r') {
+                    token += s[i + 1];
+                    i += 2;
+                } else {
+                    token += c;
+                    i++;
+                }
+            }
+            if (started) tokens.push(token);
+        }
+        return tokens;
+    }
+
+    /* ---------------- CURL IMPORT ---------------- */
+    function parseCurl() {
+        const tokens = tokenizeCurl(el('curlImport').value);
+        let i = 0;
+        if (tokens[0] === 'curl') i = 1;
+
+        const req = { method: '', headers: {}, body: '', url: '' };
+        const dataParts = [];
+        let useGet = false, useHead = false, hasData = false;
+
+        const argFlags = new Set([
+            '-X', '--request', '-H', '--header', '-b', '--cookie',
+            '-A', '--user-agent', '-e', '--referer', '-u', '--user',
+            '--url', '-d', '--data', '--data-raw', '--data-binary',
+            '--data-ascii', '--data-urlencode', '-F', '--form',
+            '-T', '--upload-file', '-o', '--output',
+            '--connect-timeout', '--max-time',
+            '--proxy', '-x', '--cacert', '--cert', '--key', '--resolve',
+        ]);
+        const noArgFlags = new Set([
+            '-G', '--get', '-I', '--head', '-k', '--insecure',
+            '-L', '--location', '-s', '--silent', '-S', '--show-error',
+            '-v', '--verbose', '-i', '--include', '--compressed',
+            '-f', '--fail', '-#', '--progress-bar', '-N', '--no-buffer',
+        ]);
+
+        for (; i < tokens.length; i++) {
+            const t = tokens[i];
+
+            if (t === '-X' || t === '--request') {
+                req.method = (tokens[++i] || '').toUpperCase();
+            } else if (t === '-H' || t === '--header') {
+                const v = tokens[++i] || '';
+                const idx = v.indexOf(':');
+                if (idx > 0) req.headers[v.slice(0, idx).trim()] = v.slice(idx + 1).trim();
+            } else if (t === '-b' || t === '--cookie') {
+                req.headers['Cookie'] = tokens[++i] || '';
+            } else if (t === '-A' || t === '--user-agent') {
+                req.headers['User-Agent'] = tokens[++i] || '';
+            } else if (t === '-e' || t === '--referer') {
+                req.headers['Referer'] = tokens[++i] || '';
+            } else if (t === '-u' || t === '--user') {
+                const up = tokens[++i] || '';
+                try { req.headers['Authorization'] = 'Basic ' + btoa(up); } catch { }
+            } else if (t === '--url') {
+                req.url = tokens[++i] || '';
+            } else if (t === '-d' || t === '--data' || t === '--data-raw'
+                || t === '--data-binary' || t === '--data-ascii') {
+                dataParts.push(tokens[++i] || '');
+                hasData = true;
+            } else if (t === '--data-urlencode') {
+                const part = tokens[++i] || '';
+                const eq = part.indexOf('=');
+                dataParts.push(eq >= 0
+                    ? `${part.slice(0, eq)}=${encodeURIComponent(part.slice(eq + 1))}`
+                    : encodeURIComponent(part));
+                hasData = true;
+            } else if (t === '-F' || t === '--form') {
+                dataParts.push(tokens[++i] || '');
+                hasData = true;
+                if (!req.headers['Content-Type']) req.headers['Content-Type'] = 'multipart/form-data';
+            } else if (t === '-G' || t === '--get') {
+                useGet = true;
+            } else if (t === '-I' || t === '--head') {
+                useHead = true;
+            } else if (noArgFlags.has(t)) {
+                /* skip */
+            } else if (argFlags.has(t)) {
+                i++;
+            } else if (t.startsWith('-')) {
+                /* unknown flag — ignore without consuming next */
+            } else if (!req.url) {
+                req.url = t;
+            }
+        }
+
+        if (dataParts.length === 1) {
+            const part = dataParts[0];
+            try { req.body = JSON.stringify(JSON.parse(part), null, 2); }
+            catch { req.body = part; }
+        } else if (dataParts.length > 1) {
+            req.body = dataParts.join('&');
+        }
+
+        if (!req.method) {
+            if (useHead) req.method = 'HEAD';
+            else if (useGet) req.method = 'GET';
+            else if (hasData) req.method = 'POST';
+            else req.method = 'GET';
+        }
+
+        setCurrentId(null);
+        el('method').value = req.method;
+        el('url').value = req.url || '';
+        el('headers').value = JSON.stringify(req.headers, null, 2);
+        el('body').value = req.body;
+        el('curlImport').value = '';
+        closeImportModal();
+    }
+
+    /* ---------------- SEND REQUEST ---------------- */
+    async function sendRequest() {
+        let h = {};
+        try { h = JSON.parse(el('headers').value); } catch { }
+
+        const res = await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                method: el('method').value,
+                url: el('url').value,
+                headers: h,
+                body: el('body').value
+            })
+        });
+
+        const data = await res.json();
+        el('response').textContent = formatIfJson(data?.body ?? JSON.stringify(data, null, 2));
+    }
+
+    /* ---------------- SAVE / UPDATE ---------------- */
+    async function saveRequest() {
+        const payload = {
+            name: el('name').value || 'Unnamed',
+            collection: el('collection').value || '',
+            method: el('method').value,
+            url: el('url').value,
+            headers: el('headers').value,
+            body: el('body').value
+        };
+
+        const url = currentId ? `/api/request/${currentId}` : '/api/save';
+        const method = currentId ? 'PUT' : 'POST';
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await res.json().catch(() => ({}));
+        if (res.ok && result?.request?.id) setCurrentId(result.request.id);
+        loadSaved();
+    }
+
+    /* ---------------- LOAD SAVED ---------------- */
+    async function loadSaved() {
+        const res = await fetch('/api/requests');
+        const data = await res.json();
+        const list = el('saved');
+        list.innerHTML = '';
+
+        const groups = {};
+        data.forEach(r => {
+            const c = (r.collection && String(r.collection).trim()) || 'Uncategorized';
+            (groups[c] = groups[c] || []).push(r);
+        });
+
+        Object.keys(groups).sort((a, b) => {
+            if (a === 'Uncategorized') return 1;
+            if (b === 'Uncategorized') return -1;
+            return a.localeCompare(b);
+        }).forEach(name => {
+            const wrap = document.createElement('li');
+            wrap.className = 'collection-group';
+
+            const head = document.createElement('div');
+            head.className = 'collection-head';
+
+            const title = document.createElement('span');
+            title.className = 'collection-name';
+            title.textContent = `${name} (${groups[name].length})`;
+
+            const exp = document.createElement('button');
+            exp.className = 'export-btn';
+            exp.textContent = '⤓';
+            exp.title = `Export ${name} as Postman collection`;
+            exp.onclick = e => { e.stopPropagation(); exportPostman(name); };
+
+            head.appendChild(title);
+            head.appendChild(exp);
+
+            const inner = document.createElement('ul');
+            inner.className = 'collection-items';
+
+            groups[name].forEach(r => {
+                const li = document.createElement('li');
+                li.className = 'saved-item';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'saved-name';
+                nameSpan.textContent = r.name;
+                nameSpan.title = `${(r.method || 'GET').toUpperCase()} ${r.url || ''}`;
+
+                nameSpan.onclick = () => {
+                    setCurrentId(r.id);
+                    el('name').value = r.name || '';
+                    el('collection').value = r.collection || '';
+                    el('method').value = (r.method || 'GET').toUpperCase();
+                    el('url').value = r.url || '';
+                    el('headers').value = formatIfJson(r.headers || '{}');
+                    el('body').value = formatIfJson(r.body);
+                };
+
+                const del = document.createElement('button');
+                del.textContent = '✕';
+                del.className = 'delete-btn';
+                del.onclick = async e => {
+                    e.stopPropagation();
+                    if (!confirm('Delete this request?')) return;
+                    await fetch(`/api/request/${r.id}`, { method: 'DELETE' });
+                    if (currentId === r.id) setCurrentId(null);
+                    loadSaved();
+                };
+
+                li.appendChild(nameSpan);
+                li.appendChild(del);
+                inner.appendChild(li);
+            });
+
+            head.onclick = () => {
+                inner.style.display = inner.style.display === 'none' ? '' : 'none';
+            };
+
+            wrap.appendChild(head);
+            wrap.appendChild(inner);
+            list.appendChild(wrap);
+        });
+    }
+    loadSaved();
+
+    /* ---------------- EXPORT CURL ---------------- */
+    function shellQuote(s) {
+        if (s == null) return "''";
+        return "'" + String(s).replace(/'/g, "'\\''") + "'";
+    }
+
+    function exportCurl() {
+        const method = (el('method').value || 'GET').toUpperCase();
+        const url = el('url').value || '';
+        let headers = {};
+        try { headers = JSON.parse(el('headers').value) || {}; } catch { }
+        const body = el('body').value;
+
+        const lines = [`curl -X ${method} ${shellQuote(url)}`];
+        for (const [k, v] of Object.entries(headers)) {
+            lines.push(`  -H ${shellQuote(`${k}: ${v}`)}`);
+        }
+        if (body && method !== 'GET' && method !== 'HEAD') {
+            lines.push(`  --data-raw ${shellQuote(body)}`);
+        }
+
+        el('curlExport').value = lines.join(' \\\n');
+        el('modalExport').style.display = 'flex';
+    }
+
+    /* ---------------- COPY ---------------- */
+    function copyCurl() {
+        const ta = el('curlExport');
+        ta.select();
+        try { document.execCommand('copy'); } catch { }
+    }
+
+    /* ---------------- IMPORT POSTMAN ---------------- */
+    async function importPostman(event) {
+        const input = event.target;
+        const file = input.files && input.files[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            const res = await fetch('/api/import/postman', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (!res.ok) {
+                alert(`Import failed: ${result.error || res.status}`);
+            } else {
+                alert(`Imported ${result.imported} request(s).`);
+                loadSaved();
+            }
+        } catch (err) {
+            alert(`Could not parse file: ${err.message}`);
+        } finally {
+            input.value = '';
+        }
+    }
+
+    /* ---------------- EXPORT POSTMAN ---------------- */
+    async function exportPostman(collection) {
+        const url = collection
+            ? `/api/postman?collection=${encodeURIComponent(collection)}`
+            : '/api/postman';
+        const res = await fetch(url);
+        const data = await res.json();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const objUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = objUrl;
+        a.download = `${(collection || 'postnia').replace(/[^\w-]+/g, '_')}.postman_collection.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objUrl);
+    }
+
+    /* ---------------- FORMAT ON BLUR ---------------- */
+    el('headers').addEventListener('blur', () => el('headers').value = formatIfJson(el('headers').value));
+    el('body').addEventListener('blur', () => el('body').value = formatIfJson(el('body').value));
+</script>
+
+</html>

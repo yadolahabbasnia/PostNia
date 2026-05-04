@@ -1,0 +1,33 @@
+{
+  "name": "postnia",
+  "version": "1.0.0",
+  "main": "server.js",
+  "bin": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "build": "pkg . --compress GZip",
+    "build:linux": "pkg . --targets node24-linux-x64 --compress GZip",
+    "build:mac": "pkg . --targets node24-macos-x64,node24-macos-arm64 --compress GZip",
+    "build:win": "pkg . --targets node24-win-x64 --compress GZip"
+  },
+  "pkg": {
+    "assets": [
+      "public/**/*"
+    ],
+    "targets": [
+      "node24-linux-x64",
+      "node24-macos-x64",
+      "node24-macos-arm64",
+      "node24-win-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "jose": "^6.1.3"
+  },
+  "devDependencies": {
+    "@yao-pkg/pkg": "^6.0.0"
+  }
+}
